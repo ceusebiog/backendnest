@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { SwapiModule } from './domains/swapi/swapi.module';
+import { SwapiController } from './api/swapi.controller';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [SwapiModule],
+  controllers: [SwapiController],
 })
 export class AppModule {}
