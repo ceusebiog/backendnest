@@ -21,6 +21,10 @@ provider:
             - dynamodb:Scan
           Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}
 
+package:
+  patterns:
+    - '!node_modules/**'
+
 functions:
   main:
     handler: dist/main.handler
