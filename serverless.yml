@@ -30,6 +30,9 @@ functions:
     handler: dist/main.handler
     events:
       - http:
+          path: /{proxy+}
+          method: get
+      - http:
           path: personas
           method: post
       - http:

@@ -1,21 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { PersonaEntity } from '../entities/persona.entity';
+import { SWPersonaEntity } from '../entities/persona.entity';
 import axios from 'axios';
 
 @Injectable()
 export class PersonaService {
   private readonly SWAPI_URL = 'https://swapi.dev/api/people/';
 
-  async getPersonas(): Promise<PersonaEntity[]> {
+  async getPersonas(): Promise<SWPersonaEntity[]> {
     const response = await axios.get(this.SWAPI_URL);
-    const results: any[] = response.data.results
+    const results: any[] = response.data.results;
 
-    return results.map((v, i)=> PersonaEntity.fromApiEntity(v, (i + 1).toString()))
+    return results.map((v, i) =>
+      SWPersonaEntity.fromApiEntity(v, (i + 1).toString()),
+    );
   }
 
-  async getPersona(id: string): Promise<PersonaEntity> {
+  async getPersona(id: string): Promise<SWPersonaEntity> {
     const response = await axios.get(`${this.SWAPI_URL}${id}`);
 
-    return PersonaEntity.fromApiEntity(response.data, id)
+    return SWPersonaEntity.fromApiEntity(response.data, id);
   }
 }

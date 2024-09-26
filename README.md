@@ -7,14 +7,14 @@ Reto tecnico para el puesto de Backend NodeJS AWS
 ## Project setup
 
 ```bash
-$ npm install
+$ yarn install
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ npm run build
+$ yarn run build
 
 # local execution
 $ npx serverless offline
@@ -24,7 +24,7 @@ $ npx serverless offline
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn run test
 ```
 
 ## Deploy the project
