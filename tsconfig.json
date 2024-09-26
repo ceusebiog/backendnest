@@ -18,7 +18,7 @@
     "strictBindCallApply": false,
     "strictNullChecks": false,
     "target": "ES2021",
-    "types": ["babel__generator", "node"],
+    "types": ["babel__generator", "node", "jest"],
     "typeRoots": ["node_modules/@types", "path/to/your/custom/types"],
   }
 }

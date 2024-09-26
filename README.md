@@ -25,6 +25,9 @@ $ npx serverless offline
 ```bash
 # unit tests
 $ yarn run test
+
+# unit tests coverage
+$ yarn run test:cov
 ```
 
 ## Deploy the project
