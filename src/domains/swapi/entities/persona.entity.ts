@@ -121,7 +121,7 @@ export class SWPersonaEntity {
   })
   url: string;
 
-  static fromApiEntity(data: any, index: string): SWPersonaEntity {
+  static fromApiEntity(data: PeopleEntity, index: string): SWPersonaEntity {
     return {
       id: index,
       nombre: data.name,
@@ -142,4 +142,23 @@ export class SWPersonaEntity {
       url: data.url,
     };
   }
+}
+
+export class PeopleEntity {
+  name: string;
+  height: string;
+  mass: string;
+  hair_color: string;
+  skin_color: string;
+  eye_color: string;
+  birth_year: string;
+  gender: string;
+  homeworld: string;
+  films: string[];
+  species: string[];
+  vehicles: string[];
+  starships: string[];
+  created: string;
+  edited: string;
+  url: string;
 }

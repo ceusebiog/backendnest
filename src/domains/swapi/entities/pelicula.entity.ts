@@ -111,7 +111,7 @@ export class SWPeliculaEntity {
   })
   vehiculos: string[];
 
-  static fromApiEntity(data: any, index: string): SWPeliculaEntity {
+  static fromApiEntity(data: FilmEntity, index: string): SWPeliculaEntity {
     return {
       id: index,
       personajes: data.characters,
@@ -130,4 +130,21 @@ export class SWPeliculaEntity {
       vehiculos: data.vehicles,
     };
   }
+}
+
+export class FilmEntity {
+  characters: string[];
+  created: string;
+  director: string;
+  edited: string;
+  episode_id: number;
+  opening_crawl: string;
+  planets: string[];
+  producer: string;
+  release_date: string;
+  species: string[];
+  starships: string[];
+  title: string;
+  url: string;
+  vehicles: string[];
 }

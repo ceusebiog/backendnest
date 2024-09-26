@@ -1,23 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { SWPeliculaEntity } from '../entities/pelicula.entity';
-import axios from 'axios';
+import { SWAPIRepository } from '../repositories/swapi.repository';
 
 @Injectable()
 export class PeliculaService {
-  private readonly SWAPI_URL = 'https://swapi.dev/api/films/';
+  constructor(private readonly swAPIRepository: SWAPIRepository) {}
 
   async getPeliculas(): Promise<SWPeliculaEntity[]> {
-    const response = await axios.get(this.SWAPI_URL);
-    const results: any[] = response.data.results;
+    const filmsArray = await this.swAPIRepository.getFilms();
 
-    return results.map((v, i) =>
+    return filmsArray.map((v, i) =>
       SWPeliculaEntity.fromApiEntity(v, (i + 1).toString()),
     );
   }
 
   async getPelicula(id: string): Promise<SWPeliculaEntity> {
-    const response = await axios.get(`${this.SWAPI_URL}${id}`);
+    const film = await this.swAPIRepository.getFilmById(id);
 
-    return SWPeliculaEntity.fromApiEntity(response.data, id);
+    return SWPeliculaEntity.fromApiEntity(film, id);
   }
 }
