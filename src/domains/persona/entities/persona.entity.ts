@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Genero } from '../dtos/types';
 
 export class PersonaEntity {
   @ApiProperty({
@@ -42,4 +43,13 @@ export class PersonaEntity {
     type: Date,
   })
   fechaNacimiento: Date;
+
+  @ApiProperty({
+    description: 'La persona es donadora de organos',
+    enum: Genero,
+    type: Genero,
+    example: 'Masculino',
+    required: true,
+  })
+  genero: Genero;
 }

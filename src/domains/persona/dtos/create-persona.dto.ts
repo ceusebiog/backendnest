@@ -53,6 +53,7 @@ export class CreatePersonaDto {
   @ApiProperty({
     description: 'Fecha de nacimiento de la persona',
     required: true,
+    example: '1960-05-23',
     type: Date,
   })
   @IsDate()

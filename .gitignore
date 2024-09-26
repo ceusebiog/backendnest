@@ -3,6 +3,7 @@
 /node_modules
 /build
 /.serverless
+/undefined
 
 # Logs
 logs

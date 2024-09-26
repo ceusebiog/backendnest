@@ -42,7 +42,12 @@ export class PersonaController {
   @ApiNotFoundResponse({
     description: 'No se encontro el registro de la persona',
   })
-  @ApiParam({ name: 'id', required: true, example: 1, type: String })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: 'dada4982-90fc-4b2c-ba3f-29e425c82a1c',
+    type: String,
+  })
   @Get(':id')
   async getPersonaById(@Param('id') id: string): Promise<PersonaEntity> {
     return this.personaService.getPersonaById(id);
