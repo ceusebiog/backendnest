@@ -10,7 +10,7 @@ export class SWPeliculaEntity {
 
   @ApiProperty({
     description:
-      'Url de los registros de las Personajess que aparecen en la pelicula',
+      'Url de los registros de las Personajes que aparecen en la pelicula',
     example: ['https://swapi.dev/api/people/1/'],
     type: [String],
   })

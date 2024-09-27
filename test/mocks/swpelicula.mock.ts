@@ -1,4 +1,9 @@
-export const SWPeliculaMock = {
+import {
+  FilmEntity,
+  SWPeliculaEntity,
+} from 'src/domains/swapi/entities/pelicula.entity';
+
+export const SWPeliculaMock: SWPeliculaEntity = {
   id: '1',
   personajes: [
     'https://swapi.dev/api/people/1/',
@@ -60,7 +65,7 @@ export const SWPeliculaMock = {
   ],
 };
 
-export const FilmMock = {
+export const FilmMock: FilmEntity = {
   title: 'A New Hope',
   episode_id: 4,
   opening_crawl:

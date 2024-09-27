@@ -1,4 +1,9 @@
-export const SWPersonaMock = {
+import {
+  PeopleEntity,
+  SWPersonaEntity,
+} from 'src/domains/swapi/entities/persona.entity';
+
+export const SWPersonaMock: SWPersonaEntity = {
   id: '1',
   nombre: 'Luke Skywalker',
   altura: '172',
@@ -29,7 +34,7 @@ export const SWPersonaMock = {
   url: 'https://swapi.dev/api/people/1/',
 };
 
-export const PeopleMock = {
+export const PeopleMock: PeopleEntity = {
   name: 'Luke Skywalker',
   height: '172',
   mass: '77',
