@@ -23,7 +23,7 @@ export class PersonaController {
   async createPersona(
     @Body() createPersonaDto: CreatePersonaDto,
   ): Promise<PersonaEntity> {
-    return this.personaService.createPersona(createPersonaDto);
+    return await this.personaService.createPersona(createPersonaDto);
   }
 
   @ApiOkResponse({
@@ -32,7 +32,7 @@ export class PersonaController {
   })
   @Get()
   async getPersonas(): Promise<PersonaEntity[]> {
-    return this.personaService.getPersonas();
+    return await this.personaService.getPersonas();
   }
 
   @ApiOkResponse({
@@ -50,6 +50,6 @@ export class PersonaController {
   })
   @Get(':id')
   async getPersonaById(@Param('id') id: string): Promise<PersonaEntity> {
-    return this.personaService.getPersonaById(id);
+    return await this.personaService.getPersonaById(id);
   }
 }

@@ -24,7 +24,7 @@ export class SwapiController {
   })
   @Get('/personas')
   async getPersonas(): Promise<SWPersonaEntity[]> {
-    return this.personaService.getPersonas();
+    return await this.personaService.getPersonas();
   }
 
   @ApiOkResponse({
@@ -38,7 +38,7 @@ export class SwapiController {
   @ApiParam({ name: 'id', required: true, example: 1, type: Number })
   @Get('/persona/:id')
   async getPersona(@Param('id') id: string): Promise<SWPersonaEntity> {
-    return this.personaService.getPersona(id);
+    return await this.personaService.getPersona(id);
   }
 
   @ApiOkResponse({
@@ -47,7 +47,7 @@ export class SwapiController {
   })
   @Get('/peliculas')
   async getPeliculas(): Promise<SWPeliculaEntity[]> {
-    return this.peliculaService.getPeliculas();
+    return await this.peliculaService.getPeliculas();
   }
 
   @ApiOkResponse({
@@ -60,6 +60,6 @@ export class SwapiController {
   @ApiParam({ name: 'id', required: true, example: 1, type: Number })
   @Get('/pelicula/:id')
   async getPelicula(@Param('id') id: string): Promise<SWPeliculaEntity> {
-    return this.peliculaService.getPelicula(id);
+    return await this.peliculaService.getPelicula(id);
   }
 }

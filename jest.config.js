@@ -9,4 +9,8 @@ module.exports = {
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   moduleDirectories: ['node_modules', 'src', __dirname],
+  collectCoverageFrom: [
+    '!**/*.{js,jsx}',
+    '!**/node_modules/**',
+  ]
 };
