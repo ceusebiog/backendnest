@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { SWPersonaEntity } from '../entities/persona.entity';
 import { SWAPIRepository } from '../repositories/swapi.repository';
 
@@ -7,16 +11,35 @@ export class PersonaService {
   constructor(private readonly swAPIRepository: SWAPIRepository) {}
 
   async getPersonas(): Promise<SWPersonaEntity[]> {
-    const peopleArray = await this.swAPIRepository.getPeople();
+    try {
+      const peopleArray = await this.swAPIRepository.getPeople();
 
-    return peopleArray.map((v, i) =>
-      SWPersonaEntity.fromApiEntity(v, (i + 1).toString()),
-    );
+      return peopleArray.map((v, i) =>
+        SWPersonaEntity.fromApiEntity(v, (i + 1).toString()),
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error obteniendo el listado de registros de personas',
+      );
+    }
   }
 
   async getPersona(id: string): Promise<SWPersonaEntity> {
-    const people = await this.swAPIRepository.getPeopleById(id);
+    try {
+      const people = await this.swAPIRepository.getPeopleById(id);
 
-    return SWPersonaEntity.fromApiEntity(people, id);
+      if (!people) {
+        throw new NotFoundException(`Persona con ID ${id} no encontrado`);
+      }
+
+      return SWPersonaEntity.fromApiEntity(people, id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        `Error obteniendo el registro de la persona con ID ${id}`,
+      );
+    }
   }
 }

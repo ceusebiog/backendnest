@@ -4,6 +4,10 @@ import { PersonaService } from 'src/domains/persona/services/persona.service';
 import { CreatePersonaDto } from 'src/domains/persona/dtos/create-persona.dto';
 import { PersonaEntity } from 'src/domains/persona/entities/persona.entity';
 import { PersonaMock } from 'test/mocks/persona.mock';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('PersonaService', () => {
   let service: PersonaService;
@@ -28,6 +32,10 @@ describe('PersonaService', () => {
     repository = module.get<DynamoDBRepository>(DynamoDBRepository);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('debe estar definido', () => {
     expect(service).toBeDefined();
   });
@@ -44,6 +52,21 @@ describe('PersonaService', () => {
         expect.objectContaining(createPersonaDto),
       );
       expect(result).toEqual(expect.objectContaining(createPersonaDto));
+    });
+
+    it('debe lanzar una excepción InternalServerErrorException si falla el guardado', async () => {
+      const personaEntity: PersonaEntity = {
+        id: '123',
+        ...PersonaMock,
+      };
+
+      (repository.save as jest.Mock).mockRejectedValue(
+        new Error('DynamoDB save failed'),
+      );
+
+      await expect(service.createPersona(personaEntity)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
@@ -63,6 +86,16 @@ describe('PersonaService', () => {
       expect(repository.getAll).toHaveBeenCalled();
       expect(result).toEqual(personaEntity);
     });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      (repository.getAll as jest.Mock).mockRejectedValue(
+        new Error('DynamoDB get failed'),
+      );
+
+      await expect(service.getPersonas()).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
   });
 
   describe('getPersonaById', () => {
@@ -79,6 +112,28 @@ describe('PersonaService', () => {
 
       expect(repository.getById).toHaveBeenCalledWith(id);
       expect(result).toEqual(personaEntity);
+    });
+
+    it('debe lanzar una excepción NotFoundException si el registro de la persona no existe', async () => {
+      const id = '123';
+
+      (repository.getById as jest.Mock).mockResolvedValue(null);
+
+      await expect(service.getPersonaById(id)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      const id = '123';
+
+      (repository.getById as jest.Mock).mockRejectedValue(
+        new Error('DynamoDB get failed'),
+      );
+
+      await expect(service.getPersonaById(id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });

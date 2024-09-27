@@ -1,3 +1,7 @@
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SWPersonaEntity } from 'src/domains/swapi/entities/persona.entity';
 import { SWAPIRepository } from 'src/domains/swapi/repositories/swapi.repository';
@@ -26,6 +30,10 @@ describe('PersonaService', () => {
     repository = module.get<SWAPIRepository>(SWAPIRepository);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('debe estar definido', () => {
     expect(service).toBeDefined();
   });
@@ -41,6 +49,16 @@ describe('PersonaService', () => {
       expect(repository.getPeople).toHaveBeenCalled();
       expect(result).toEqual(personasArray);
     });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      (repository.getPeople as jest.Mock).mockRejectedValue(
+        new Error('DynamoDB get failed'),
+      );
+
+      await expect(service.getPersonas()).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
   });
 
   describe('getPersonaById', () => {
@@ -53,6 +71,26 @@ describe('PersonaService', () => {
 
       expect(repository.getPeopleById).toHaveBeenCalledWith(personaEntity.id);
       expect(result).toEqual(personaEntity);
+    });
+
+    it('debe lanzar una excepción NotFoundException si el registro de la persona no existe', async () => {
+      const id = 'abc';
+
+      (repository.getPeopleById as jest.Mock).mockResolvedValue(null);
+
+      await expect(service.getPersona(id)).rejects.toThrow(NotFoundException);
+    });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      const id = 'abc';
+
+      (repository.getPeopleById as jest.Mock).mockRejectedValue(
+        new Error('DynamoDB get failed'),
+      );
+
+      await expect(service.getPersona(id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });

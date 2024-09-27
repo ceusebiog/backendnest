@@ -1,3 +1,7 @@
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SWPeliculaEntity } from 'src/domains/swapi/entities/pelicula.entity';
 import { SWAPIRepository } from 'src/domains/swapi/repositories/swapi.repository';
@@ -26,6 +30,10 @@ describe('PeliculaService', () => {
     repository = module.get<SWAPIRepository>(SWAPIRepository);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('debe estar definido', () => {
     expect(service).toBeDefined();
   });
@@ -41,6 +49,16 @@ describe('PeliculaService', () => {
       expect(repository.getFilms).toHaveBeenCalled();
       expect(result).toEqual(personasArray);
     });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      (repository.getFilms as jest.Mock).mockRejectedValue(
+        new Error('SWAPI get failed'),
+      );
+
+      await expect(service.getPeliculas()).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
   });
 
   describe('getPeliculaById', () => {
@@ -53,6 +71,26 @@ describe('PeliculaService', () => {
 
       expect(repository.getFilmById).toHaveBeenCalledWith(personaEntity.id);
       expect(result).toEqual(personaEntity);
+    });
+
+    it('debe lanzar una excepción NotFoundException si la pelicula no existe', async () => {
+      const id = 'abc';
+
+      (repository.getFilmById as jest.Mock).mockResolvedValue(null);
+
+      await expect(service.getPelicula(id)).rejects.toThrow(NotFoundException);
+    });
+
+    it('debe lanzar una excepción InternalServerErrorException si ocurre un error inesperado', async () => {
+      const id = 'abc';
+
+      (repository.getFilmById as jest.Mock).mockRejectedValue(
+        new Error('SWAPI get failed'),
+      );
+
+      await expect(service.getPelicula(id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });
