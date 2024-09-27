@@ -1,35 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  PutCommand,
+  DynamoDBDocumentClient,
+  ScanCommand,
+  GetCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { PersonaEntity } from '../entities/persona.entity';
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
 @Injectable()
 export class DynamoDBRepository {
   private readonly tableName = process.env.DYNAMODB_TABLE || 'Personas';
 
   async save(persona: PersonaEntity): Promise<void> {
-    const params = {
+    const comand: PutCommand = new PutCommand({
       TableName: this.tableName,
       Item: persona,
-    };
-    await dynamoDB.put(params).promise();
+    });
+    await docClient.send(comand);
   }
 
   async getAll(): Promise<PersonaEntity[]> {
-    const params = {
+    const comand: ScanCommand = new ScanCommand({
       TableName: this.tableName,
-    };
-    const result = await dynamoDB.scan(params).promise();
+    });
+    const result = await docClient.send(comand);
     return result.Items as PersonaEntity[];
   }
 
   async getById(id: string): Promise<PersonaEntity> {
-    const params = {
+    const comand: GetCommand = new GetCommand({
       TableName: this.tableName,
       Key: { id },
-    };
-    const result = await dynamoDB.get(params).promise();
+    });
+    const result = await docClient.send(comand);
     return result.Item as PersonaEntity;
   }
 }
