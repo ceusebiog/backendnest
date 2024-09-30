@@ -1,8 +1,8 @@
-# Reto Técnico - Backend NodeJS AWS
+# Backend NodeJS AWS
 
 ## Description
 
-Reto tecnico para el puesto de Backend NodeJS AWS
+Backend NodeJS con Framework NestJS y desplegado en AWS
 
 ## Project setup
 
@@ -35,7 +35,3 @@ $ yarn run test:cov
 ```bash
 $ serverless deploy
 ```
-
-## License
-
-[MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
